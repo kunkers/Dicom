@@ -2,10 +2,12 @@ package com.example.akuno.dicom;
 
 import android.graphics.Bitmap;
 import android.os.Environment;
-import android.support.v4.widget.TextViewCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.imebra.CodecFactory;
@@ -23,13 +25,13 @@ import com.imebra.VOILUT;
 import com.imebra.VOIs;
 import com.imebra.drawBitmapType_t;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,21 +42,32 @@ public class MainActivity extends AppCompatActivity {
 
         System.loadLibrary("imebra_lib");
 
-        String path = "android.resource://" + getPackageName() + "/" + R.raw.brain_001;
+        File downloadDir = new File(Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_DOWNLOADS).getAbsolutePath() + "/sample1.dcm");
 
-        FileStreamInput file = new FileStreamInput(path);
+        Log.d("FILE_TAG", "is exist:" + downloadDir.exists());
 
-        DataSet loadedDataSet= CodecFactory.load(new StreamReader(file), 256);
+
+        //String path = "android.resource://" + getPackageName() + "/" + R.raw.brain_001;
+
+        FileStreamInput file = new FileStreamInput(downloadDir.getAbsolutePath());
+
+        DataSet loadedDataSet= CodecFactory.load(new StreamReader(file));
 
         //DicomFile.dcm
 
-        String patientName = loadedDataSet.getString(new TagId(0x10, 0x10), 0);
-        String patientId = loadedDataSet.getString(new TagId(0x10, 0x20), 0);
-        String patientBirth = loadedDataSet.getString(new TagId(0x10, 0x30), 0);
+        String patientName = loadedDataSet.getString(new TagId(0x0010, 0x0010), 0);
+        String patientId = loadedDataSet.getString(new TagId(0x0010, 0x0020), 0);
+        String patientBirth = loadedDataSet.getString(new TagId(0x0010, 0x0030), 0);
 
-        TextView name = (TextView) findViewById(R.id.patientname);
-        TextView id = (TextView) findViewById(R.id.patientid);
-        TextView birth = (TextView) findViewById(R.id.patientbirth);
+        TextView name = (TextView) findViewById(R.id.name);
+        TextView id = (TextView) findViewById(R.id.id);
+        TextView birth = (TextView) findViewById(R.id.birth);
+        TextView namepatient = (TextView) findViewById(R.id.patientname);
+        TextView idpatient = (TextView) findViewById(R.id.patientid);
+        TextView birthpatient = (TextView) findViewById(R.id.patientbirth);
+        ImageView imageView = (ImageView) findViewById(R.id.imagedicom);
+        Button button = (Button) findViewById(R.id.button);
 
         name.setText(patientName);
         id.setText(patientId);
@@ -68,8 +81,9 @@ public class MainActivity extends AppCompatActivity {
         long width = image.getWidth();
         long height = image.getHeight();
 
-        ReadingDataHandlerNumeric dataHandlerNumeric = loadedDataSet.getReadingDataHandlerNumeric(new TagId(0x10, 0x10), 0);
+//        ReadingDataHandlerNumeric dataHandlerNumeric = loadedDataSet.getReadingDataHandlerNumeric(new TagId(0x10, 0x10), 0);
 
+        ReadingDataHandlerNumeric dataHandlerNumeric = image.getReadingDataHandler();
 
         for(long scanY = 0; scanY != height; scanY++)
         {
@@ -78,9 +92,9 @@ public class MainActivity extends AppCompatActivity {
                 // For monochrome images
                 int luminance = dataHandlerNumeric.getSignedLong(scanY * width + scanX);
                 // For RGB images
-                int r = dataHandlerNumeric.getSignedLong((scanY * width + scanX) * 3);
-                int g = dataHandlerNumeric.getSignedLong((scanY * width + scanX) * 3 + 1);
-                int b = dataHandlerNumeric.getSignedLong((scanY * width + scanX) * 3 + 2);
+//                int r = dataHandlerNumeric.getSignedLong((scanY * width + scanX) * 3);
+//                int g = dataHandlerNumeric.getSignedLong((scanY * width + scanX) * 3 + 1);
+//                int b = dataHandlerNumeric.getSignedLong((scanY * width + scanX) * 3 + 2);
             }
         }
 
@@ -123,6 +137,22 @@ public class MainActivity extends AppCompatActivity {
         Bitmap renderBitmap = Bitmap.createBitmap((int) image.getWidth(), (int) image.getHeight(), Bitmap.Config.ARGB_8888);
         renderBitmap.copyPixelsFromBuffer(byteBuffer);
 
+        //imageView.setImageBitmap(renderBitmap);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imageView.setImageBitmap(renderBitmap);
+                name.setVisibility(View.GONE);
+                id.setVisibility(View.GONE);
+                birth.setVisibility(View.GONE);
+                birthpatient.setVisibility(View.GONE);
+                namepatient.setVisibility(View.GONE);
+                idpatient.setVisibility(View.GONE);
+                button.setVisibility(View.GONE);
+                imageView.setVisibility(View.VISIBLE);
+            }
+        });
 
     }
 }

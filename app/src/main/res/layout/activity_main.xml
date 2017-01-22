@@ -14,13 +14,57 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Patient Name: "
-        android:id="@+id/patientname" />
+        android:textSize="20dp"
+        android:id="@+id/patientname"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=".... "
+        android:id="@+id/name"
+        android:textSize="20dp"
+        android:layout_below="@+id/patientname"
+        android:layout_alignEnd="@+id/birth" />
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/imagedicom"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/birth"
+        android:layout_toEndOf="@+id/birth"
+        android:layout_marginStart="45dp"
+        android:visibility="gone"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/button"
+        android:text="Show image"
+        android:shadowColor="@android:color/holo_blue_bright"
+        android:layout_below="@+id/birth"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="67dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Patient's date of birth: "
+        android:textSize="20dp"
+        android:id="@+id/patientbirth"
+        android:layout_marginTop="60dp"
+        android:layout_below="@+id/id"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="... "
         android:id="@+id/birth"
+        android:textSize="20dp"
+        android:layout_marginTop="10dp"
         android:layout_below="@+id/patientbirth"
         android:layout_alignParentStart="true" />
 
@@ -29,32 +73,18 @@
         android:layout_height="wrap_content"
         android:text="Patient ID: "
         android:id="@+id/patientid"
-        android:layout_below="@+id/patientname"
+        android:textSize="20dp"
+        android:layout_below="@+id/name"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="45dp" />
+        android:layout_marginTop="30dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="..."
         android:id="@+id/id"
+        android:textSize="20dp"
         android:layout_below="@+id/patientid"
         android:layout_alignParentStart="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=".... "
-        android:id="@+id/name"
-        android:layout_below="@+id/patientname"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Patient's date of birth: "
-        android:id="@+id/patientbirth"
-        android:layout_marginTop="28dp"
-        android:layout_below="@+id/id"
-        android:layout_alignParentStart="true" />
 </RelativeLayout>
